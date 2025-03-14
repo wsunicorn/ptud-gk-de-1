@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý bài viết{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header Section -->
+    <div class="profile-section mb-4">
+        <div class="profile-header">
+            <div class="text-avatar">
+                {{ current_user.username[0] }}
+            </div>
+            <div class="profile-info">
+                <h2>{{ current_user.name or current_user.username }}</h2>
+                <p><i class="bi bi-person-badge"></i> Actor</p>
+                <p><i class="bi bi-calendar3"></i> Tham gia từ {{ current_user.created_at.strftime('%d/%m/%Y') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-grid mb-4">
+        <div class="stat-card">
+            <h3>{{ posts|length }}</h3>
+            <p><i class="bi bi-file-text"></i> Bài viết</p>
+        </div>
+        <div class="stat-card">
+            <h3>{% set total_comments = 0 %}{% for post in posts %}{% set total_comments = total_comments + post.comments.count() %}{% endfor %}{{ total_comments }}</h3>
+            <p><i class="bi bi-chat-dots"></i> Bình luận</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ current_user.created_at.strftime('%m/%Y') }}</h3>
+            <p><i class="bi bi-person-check"></i> Thành viên từ</p>
+        </div>
+    </div>
+
+    <!-- Posts Management Section -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0"><i class="bi bi-journal-text"></i> Danh sách bài viết</h4>
+                <a href="{{ url_for('actor.create_post') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Tạo bài viết mới
+                </a>
+            </div>
+
+            {% if posts %}
+                {% for post in posts %}
+                <div class="card mb-3 post-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title mb-2">
+                                    <a href="{{ url_for('blog.post_detail', post_id=post.id) }}" 
+                                       class="text-decoration-none">
+                                        {{ post.title }}
+                                    </a>
+                                </h5>
+                                <p class="text-muted mb-2">
+                                    <small>
+                                        <i class="bi bi-clock"></i> {{ post.created_at.strftime('%d/%m/%Y %H:%M') }}
+                                        <span class="mx-2">•</span>
+                                        <i class="bi bi-chat"></i> {{ post.comments.count() }} bình luận
+                                    </small>
+                                </p>
+                                <p class="card-text text-muted">
+                                    {{ post.content[:200] + '...' if post.content|length > 200 else post.content }}
+                                </p>
+                            </div>
+                            <div class="ms-3">
+                                <div class="btn-group">
+                                    <a href="{{ url_for('actor.edit_post', post_id=post.id) }}" 
+                                       class="btn btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{{ url_for('actor.delete_post', post_id=post.id) }}" 
+                                       class="btn btn-outline-danger"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-journal-x display-4 text-muted mb-3 d-block"></i>
+                    <p class="text-muted mb-4">Bạn chưa có bài viết nào.</p>
+                    <a href="{{ url_for('actor.create_post') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Tạo bài viết đầu tiên
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Floating Action Button for Mobile -->
+<a href="{{ url_for('actor.create_post') }}" class="btn btn-primary btn-floating d-md-none">
+    <i class="bi bi-plus-lg"></i>
+</a>
+{% endblock %} 

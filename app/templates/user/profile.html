@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Trang cá nhân{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Profile Section -->
+    <div class="profile-section">
+        <div class="profile-header">
+            <div class="text-avatar">
+                {{ current_user.username[0] }}
+            </div>
+            <div class="profile-info">
+                <h2>{{ current_user.name or current_user.username }}</h2>
+                <p><i class="bi bi-envelope"></i> {{ current_user.email }}</p>
+                <p><i class="bi bi-calendar3"></i> Tham gia từ {{ current_user.created_at.strftime('%d/%m/%Y') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ comments|length }}</h3>
+            <p><i class="bi bi-chat-dots"></i> Bình luận</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ current_user.created_at.strftime('%m/%Y') }}</h3>
+            <p><i class="bi bi-person-check"></i> Thành viên từ</p>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0"><i class="bi bi-chat-quote"></i> Bình luận của tôi</h4>
+            </div>
+
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="comment">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <a href="{{ url_for('blog.post_detail', post_id=comment.post.id) }}" 
+                                   class="text-decoration-none">
+                                    <h5 class="mb-0">{{ comment.post.title }}</h5>
+                                </a>
+                                <div class="d-flex align-items-center">
+                                    <small class="text-muted me-3">
+                                        <i class="bi bi-clock"></i> {{ comment.created_at.strftime('%d/%m/%Y %H:%M') }}
+                                    </small>
+                                    <a href="{{ url_for('user.delete_comment', comment_id=comment.id) }}" 
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bình luận này?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="card-text">{{ comment.content }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-chat-dots display-4 text-muted mb-3"></i>
+                    <p class="text-muted">Bạn chưa có bình luận nào.</p>
+                    <a href="{{ url_for('blog.home') }}" class="btn btn-primary">
+                        <i class="bi bi-book"></i> Xem các bài viết
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

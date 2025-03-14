@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-4">
+        <img src="{{ post.image_url }}" class="card-img-top" alt="Hình ảnh bài viết">
+        <div class="card-body">
+            <h1 class="card-title">{{ post.title }}</h1>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <small class="text-muted">Đăng bởi {{ post.author.username }} vào {{ post.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                {% if current_user.is_authenticated and current_user.id == post.author.id %}
+                <div>
+                    <a href="{{ url_for('actor.edit_post', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-pencil"></i> Sửa
+                    </a>
+                    <a href="{{ url_for('actor.delete_post', post_id=post.id) }}" class="btn btn-sm btn-outline-danger" 
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
+                        <i class="bi bi-trash"></i> Xóa
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <p class="card-text post-content">{{ post.content }}</p>
+        </div>
+    </div>
+
+    <!-- Phần bình luận -->
+    <div class="comment-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Bình luận ({{ comments|length }})</h3>
+            {% if current_user.is_authenticated and current_user.__class__.__name__ == 'User' %}
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#commentForm">
+                    <i class="bi bi-plus-circle"></i> Thêm bình luận
+                </button>
+            {% endif %}
+        </div>
+
+        {% if not current_user.is_authenticated %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Vui lòng <a href="{{ url_for('auth.login') }}">đăng nhập</a> để xem và thêm bình luận.
+            </div>
+        {% else %}
+            {% if current_user.__class__.__name__ == 'User' %}
+                <div class="collapse mb-4" id="commentForm">
+                    <div class="card card-body">
+                        <form action="{{ url_for('user.add_comment', post_id=post.id) }}" method="post">
+                            <div class="form-group">
+                                <textarea name="content" class="form-control" rows="3" 
+                                         placeholder="Viết bình luận của bạn..." 
+                                         maxlength="1000" 
+                                         onkeyup="countChar(this)"
+                                         required></textarea>
+                                <small class="text-muted float-end">
+                                    Còn lại: <span id="charCount">1000</span> ký tự
+                                </small>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">
+                                <i class="bi bi-send"></i> Gửi bình luận
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Chỉ người dùng (User) mới có thể bình luận.
+                </div>
+            {% endif %}
+
+            <!-- Hiển thị danh sách bình luận -->
+            {% if comments %}
+                <div class="comments">
+                    {% for comment in comments %}
+                    <div class="comment mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="text-avatar me-2">
+                                            {{ comment.author.username[0] }}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">{{ comment.author.name or comment.author.username }}</h6>
+                                            <small class="text-muted">{{ comment.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                                        </div>
+                                    </div>
+                                    {% if current_user.id == comment.author.id %}
+                                    <div>
+                                        <a href="{{ url_for('user.delete_comment', comment_id=comment.id) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Bạn có chắc chắn muốn xóa bình luận này?')">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <p class="card-text mt-2">{{ comment.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-muted">
+                    <p>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
