@@ -113,6 +113,7 @@ export FLASK_ENV=development
 ```bash
 flask run
 ```
+## Có thể click vào file 'setup.bat' để cài đặt ngay.
 
 ## Có thể click vào file 'setup.bat' để cài đặt ngay.
 
