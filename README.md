@@ -107,6 +107,7 @@ export FLASK_ENV=development
 ```bash
 flask run
 ```
+## Có thể click vào file 'setup.bat' để cài đặt ngay.
 
 Ứng dụng sẽ chạy tại địa chỉ: `http://127.0.0.1:5000`
 
