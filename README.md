@@ -55,6 +55,7 @@
 ## Cài đặt và Chạy
 
 1. Cài đặt Git và thiết lập repository:
+
 ```bash
 # Cài đặt Git từ https://git-scm.com/downloads
 
@@ -72,10 +73,12 @@ git checkout -b main
 ```
 
 2. Cài đặt Python 3.x nếu chưa có:
+
 - Tải Python từ [python.org](https://www.python.org/downloads/)
 - Đảm bảo Python và pip đã được thêm vào PATH
 
 3. Tạo và kích hoạt môi trường ảo:
+
 ```bash
 # Tạo môi trường ảo
 python -m venv venv
@@ -88,11 +91,13 @@ source venv/bin/activate
 ```
 
 4. Cài đặt các thư viện cần thiết:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 5. Thiết lập biến môi trường:
+
 ```bash
 # Windows
 set FLASK_APP=app
@@ -104,20 +109,25 @@ export FLASK_ENV=development
 ```
 
 6. Chạy ứng dụng:
+
 ```bash
 flask run
 ```
+
+## Có thể click vào file 'setup.bat' để cài đặt ngay.
 
 Ứng dụng sẽ chạy tại địa chỉ: `http://127.0.0.1:5000`
 
 ### Tài khoản mẫu có sẵn:
 
 Actor:
+
 - Email: actor@gmail.com
 - Password: 123456
 
 User:
-- Email: user@gmail.com  
+
+- Email: user@gmail.com
 - Password: 123456
 
 ### Làm việc với Git:
