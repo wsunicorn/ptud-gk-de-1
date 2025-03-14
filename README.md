@@ -54,20 +54,28 @@
 
 ## Cài đặt và Chạy
 
-1. Clone repository:
-
+1. Cài đặt Git và thiết lập repository:
 ```bash
+# Cài đặt Git từ https://git-scm.com/downloads
+
+# Thiết lập thông tin Git (thay thế bằng thông tin của bạn)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+# Clone repository
 git clone https://github.com/wsunicorn/ptud-gk-de-1.git
 cd ptud-gk-de-1
+
+# Khởi tạo Git repository và branch main
+git init
+git checkout -b main
 ```
 
 2. Cài đặt Python 3.x nếu chưa có:
-
 - Tải Python từ [python.org](https://www.python.org/downloads/)
 - Đảm bảo Python và pip đã được thêm vào PATH
 
 3. Tạo và kích hoạt môi trường ảo:
-
 ```bash
 # Tạo môi trường ảo
 python -m venv venv
@@ -80,13 +88,11 @@ source venv/bin/activate
 ```
 
 4. Cài đặt các thư viện cần thiết:
-
 ```bash
 pip install -r requirements.txt
 ```
 
 5. Thiết lập biến môi trường:
-
 ```bash
 # Windows
 set FLASK_APP=app
@@ -98,7 +104,6 @@ export FLASK_ENV=development
 ```
 
 6. Chạy ứng dụng:
-
 ```bash
 flask run
 ```
@@ -114,6 +119,25 @@ Actor:
 User:
 - Email: user@gmail.com  
 - Password: 123456
+
+### Làm việc với Git:
+
+```bash
+# Kiểm tra trạng thái
+git status
+
+# Thêm tất cả file mới và đã thay đổi
+git add .
+
+# Commit các thay đổi
+git commit -m "Mô tả commit của bạn"
+
+# Push lên repository
+git push origin main
+
+# Nếu gặp lỗi khi push, có thể cần force push (cẩn thận khi sử dụng)
+git push -f origin main
+```
 
 ## Cấu trúc thư mục
 
